@@ -1,10 +1,17 @@
 // src/components/services/aiService.js
 
-const API_URL = 'http://localhost:5000/api/generate-rph';
+const getAPIUrl = () => {
+  if (import.meta.env.DEV) {
+    return 'http://localhost:5000/api/generate-rph';
+  }
+  // Ganti dengan URL Render anda:
+  return 'https://rph-ai-backend.onrender.com/api/generate-rph';
+};
 
 export const generateRPHWithAI = async (prompt) => {
   try {
-    console.log('📡 Sending request to backend...');
+    const API_URL = getAPIUrl();
+    console.log('📡 Sending request to:', API_URL);
     
     const response = await fetch(API_URL, {
       method: 'POST',
