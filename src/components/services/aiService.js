@@ -1,40 +1,37 @@
-// src/components/services/aiService.js
+// services/aiService.js
+const createRPHPrompt = (formData, bukuTeksInfo) => {
+  return `
+ANDA ADALAH PAKAR PENDIDIKAN BAHASA MELAYU TAHUN 3. HASILKAN RANCANGAN PENGAJARAN HARIAN (RPH) YANG SPESIFIK DAN TERPERINCI BERDASARKAN BUKU TEKS BAHASA MELAYU TAHUN 3.
 
-const getAPIUrl = () => {
-  if (import.meta.env.DEV) {
-    return 'http://localhost:5000/api/generate-rph';
-  }
-  // Ganti dengan URL Render anda:
-  return 'https://rph-ai-backend.onrender.com/api/generate-rph';
-};
+**MAKLUMAT ASAS RPH:**
+- Mata Pelajaran: Bahasa Melayu
+- Kelas: Tahun ${formData.kelas}
+- Tajuk: ${formData.tajuk}
+- Standard Pembelajaran: ${formData.standardPembelajaran}
+- Minggu: ${formData.minggu}
 
-export const generateRPHWithAI = async (prompt) => {
-  try {
-    const API_URL = getAPIUrl();
-    console.log('📡 Sending request to:', API_URL);
-    
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ prompt }),
-    });
+**INTEGRASI BUKU TEKS:**
+- TEMA: ${bukuTeksInfo.tema}
+- UNIT: ${bukuTeksInfo.unit}
+- MUKA SURAT: ${bukuTeksInfo.mukaSurat}
+- AKTIVITI BUKU TEKS: ${bukuTeksInfo.aktiviti.join(', ')}
 
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
+**ARAHAN KHUSUS:**
+1. RPH HARUS MERUJUK LANGSUNG KEPADA BUKU TEKS
+2. GUNAKAN TERMINOLOGI SPESIFIK DARI BUKU TEKS
+3. SERTAKAN MUKA SURAT SPESIFIK UNTUK SETIAP AKTIVITI
+4. INTEGRASIKAN AKTIVITI DARI BUKU TEKS KE DALAM RPH
 
-    const result = await response.json();
-    
-    if (result.success) {
-      return result.data;
-    } else {
-      throw new Error(result.error);
-    }
-    
-  } catch (error) {
-    console.error('❌ Error calling backend:', error);
-    throw error;
-  }
+**CONTOH FORMAT OUTPUT:**
+"Murid MEMBUKA BUKU TEKS MUKA SURAT ${bukuTeksInfo.mukaSurat} dan MELAKSANAKAN [AKTIVITI SPESIFIK] seperti yang terkandung dalam unit ${bukuTeksInfo.unit}"
+
+HASILKAN RPH LENGKAP DENGAN:
+1. Objektif Pembelajaran yang spesifik
+2. Aktiviti PDPC yang terperinci dengan rujukan muka surat
+3. Bahan Bantu Mengajar yang sesuai
+4. Penilaian Pembelajaran
+5. KBAT dan EMK
+
+HASILKAN RPH DALAM BAHASA MALAYSIA YANG STANDARD DAN PROFESIONAL:
+`;
 };

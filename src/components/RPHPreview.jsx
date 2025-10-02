@@ -7,6 +7,15 @@ const RPHPreview = ({ rphData }) => {
     langkahPengajaran 
   } = rphData;
 
+  // Simple export handler - alert sahaja dulu
+  const handleExportDOCX = () => {
+    alert('📥 Export DOCX feature akan datang soon!');
+  };
+
+  const handlePrint = () => {
+    alert('🖨️ Print feature akan datang soon!');
+  };
+
   return (
     <div className="rph-preview">
       <h2>RPH Dijana</h2>
@@ -33,7 +42,6 @@ const RPHPreview = ({ rphData }) => {
         </div>
       </div>
 
-      {/* Structure Baru Langkah Pengajaran */}
       <div className="preview-section">
         <h3>Langkah Pengajaran</h3>
         
@@ -83,8 +91,12 @@ const RPHPreview = ({ rphData }) => {
       </div>
 
       <div className="preview-actions">
-        <button className="export-btn">Export DOCX</button>
-        <button className="print-btn">Print RPH</button>
+        <button className="export-btn" onClick={handleExportDOCX}>
+          📥 Export DOCX
+        </button>
+        <button className="print-btn" onClick={handlePrint}>
+          🖨️ Print RPH
+        </button>
       </div>
     </div>
   );

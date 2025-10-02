@@ -1,129 +1,146 @@
-import { useState } from 'react';
-import RPHForm from './RPHForm';
-import RPHPreview from './RPHPreview';
-import LoadingSpinner from './LoadingSpinner';
-import SuccessMessage from './SuccessMessage';
-import { getRPTDataByWeek } from './services/rptDataService';
-import { generateRPHWithAI } from './services/aiService';
-import './RPHGenerator.css';
+// components/RPHGenerator.jsx
+import React, { useState } from 'react';
+import { generateRPH } from '../services/apiService';
+
+// ✅ Function untuk dapatkan info buku teks (sementara di frontend)
+const getBukuTeksByMinggu = (minggu) => {
+  const mapping = {
+    13: { tema: "Kebudayaan, Kesenian dan Estetika", unit: "Unit 13: Kekalkan Warisan Kita", mukaSurat: "8-12" },
+    14: { tema: "Kebudayaan, Kesenian dan Estetika", unit: "Unit 14: Kenali Kesenian Kita", mukaSurat: "13-18" },
+    // ... tambah mapping lain mengikut keperluan
+  };
+  return mapping[minggu] || { tema: "Umum", unit: "Aktiviti Umum", mukaSurat: "-" };
+};
 
 const RPHGenerator = () => {
-  const [rphData, setRphData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
+  const [formData, setFormData] = useState({
+    minggu: '',
+    kelas: '',
+    tajuk: '',
+    standardPembelajaran: ''
+  });
+  const [rphResult, setRphResult] = useState(null);
+  const [bukuTeksInfo, setBukuTeksInfo] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleGenerateRPH = async (formData) => {
-    setIsLoading(true);
-    setShowSuccess(false);
+  // ✅ Handle ketika minggu berubah
+  const handleMingguChange = (minggu) => {
+    setFormData(prev => ({ ...prev, minggu }));
+    const info = getBukuTeksByMinggu(parseInt(minggu));
+    setBukuTeksInfo(info);
+  };
 
+  // ✅ Handle form submit
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    
     try {
-      // Dapatkan RPT data berdasarkan minggu
-      const rptData = getRPTDataByWeek(parseInt(formData.minggu));
-      
-      if (!rptData) {
-        alert('Data RPT tidak dijumpai untuk minggu ini');
-        return;
-      }
-
-      // Enhanced AI Prompt dengan structure baru
-      const aiPrompt = `
-        BUAT RANCANGAN PENGAJARAN HARIAN (RPH) BAHASA MELAYU TAHUN 3
-
-        MAKLUMAT ASAS:
-        - Nama Guru: ${formData.namaGuru}
-        - Kelas: ${formData.namaKelas} 
-        - Waktu: ${formData.waktu}
-        - Tarikh: ${formData.tarikh}
-        - Minggu: ${formData.minggu}
-
-        DATA RPT:
-        - Tema: ${rptData.tema}
-        - Unit: ${rptData.unit}
-        - Tajuk: ${rptData.tajuk}
-        - Standard Kandungan: ${rptData.standardKandungan}
-        - Standard Pembelajaran: ${rptData.standardPembelajaran}
-
-        FORMAT LANGKAH PENGAJARAN YANG DIPERLUKAN:
-
-        LANGKAH 1-2: SET INDUKSI (5-10 minit)
-        - Aktiviti kreatif untuk menarik perhatian
-        - Kaitkan dengan pengalaman harian murid
-        - Integrasikan elemen PAK21
-
-        LANGKAH 3-4: AKTIVITI BUKU TEKS (20-25 minit)  
-        - Berdasarkan buku teks Bahasa Melayu Tahun 3
-        - Fokus pada Standard Pembelajaran: ${rptData.standardPembelajaran}
-        - Integrasikan KBAT (Kemahiran Berfikir Aras Tinggi)
-        - Gunakan pendekatan PAK21
-
-        LANGKAH 5-6: PENGUKUHAN & REFLEKSI (10-15 minit)
-        - Aktiviti pengukuhan kemahiran
-        - Refleksi pembelajaran
-        - Penilaian formatif
-        - PAK21 dalam refleksi
-
-        Sila hasilkan RPH yang lengkap mengikut format di atas.
-      `;
-
-      const generatedRPH = await generateRPHWithAI(aiPrompt);
-      
-      setRphData({
-        ...formData,
-        ...rptData,
-        langkahPengajaran: generatedRPH
-      });
-      
-      setShowSuccess(true);
-      
+      const result = await generateRPH(formData);
+      setRphResult(result);
     } catch (error) {
       console.error('Error generating RPH:', error);
-      alert('Error menjana RPH. Sila cuba lagi.');
+      alert('Error generating RPH: ' + error.message);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
   return (
     <div className="rph-generator">
-      <div className="generator-container">
-        {/* LAYOUT ASAL: Kiri Form, Kanan Preview */}
-        <div className="layout-container">
-          {/* BAHAGIAN KIRI - FORM */}
-          <div className="left-panel">
-            <RPHForm onGenerate={handleGenerateRPH} isLoading={isLoading} />
-            
-            {isLoading && <LoadingSpinner />}
-            
-            {showSuccess && (
-              <SuccessMessage 
-                message="RPH berhasil dijana!" 
-                onClose={() => setShowSuccess(false)}
-              />
-            )}
-          </div>
-
-          {/* BAHAGIAN KANAN - PREVIEW */}
-          <div className="right-panel">
-            {rphData && !isLoading && (
-              <RPHPreview rphData={rphData} />
-            )}
-            
-            {/* Placeholder jika tiada RPH lagi */}
-            {!rphData && (
-              <div className="preview-placeholder">
-                <h3>📋 Preview RPH</h3>
-                <p>Isi borang di sebelah kiri dan klik "Jana RPH AI" untuk melihat preview RPH di sini.</p>
-                <div className="placeholder-features">
-                  <div>✅ Auto-generate dari AI</div>
-                  <div>✅ Structure lengkap</div>
-                  <div>✅ PAK21 & KBAT integrated</div>
-                  <div>✅ Export DOCX ready</div>
-                </div>
-              </div>
-            )}
-          </div>
+      <h2>🧠 RPH AI Generator dengan Buku Teks</h2>
+      
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label>Minggu:</label>
+          <select 
+            value={formData.minggu} 
+            onChange={(e) => handleMingguChange(e.target.value)}
+            required
+          >
+            <option value="">Pilih Minggu</option>
+            {Array.from({length: 30}, (_, i) => i + 1).map(week => (
+              <option key={week} value={week}>Minggu {week}</option>
+            ))}
+          </select>
         </div>
-      </div>
+
+        <div className="form-group">
+          <label>Kelas:</label>
+          <input 
+            type="text" 
+            value={formData.kelas}
+            onChange={(e) => setFormData(prev => ({ ...prev, kelas: e.target.value }))}
+            placeholder="Contoh: 3 Bijak"
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Tajuk:</label>
+          <input 
+            type="text" 
+            value={formData.tajuk}
+            onChange={(e) => setFormData(prev => ({ ...prev, tajuk: e.target.value }))}
+            placeholder="Contoh: Warisan Kebudayaan Kita"
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Standard Pembelajaran:</label>
+          <input 
+            type="text" 
+            value={formData.standardPembelajaran}
+            onChange={(e) => setFormData(prev => ({ ...prev, standardPembelajaran: e.target.value }))}
+            placeholder="Contoh: 1.1.3, 2.2.1, 3.1.2"
+            required
+          />
+        </div>
+
+        {/* ✅ DISPLAY INFO BUKU TEKS */}
+        {bukuTeksInfo && (
+          <div className="buku-teks-info" style={{
+            border: '2px solid #4CAF50',
+            padding: '15px',
+            borderRadius: '8px',
+            backgroundColor: '#f9f9f9',
+            marginBottom: '20px'
+          }}>
+            <h4>📚 Rujukan Buku Teks</h4>
+            <p><strong>Tema:</strong> {bukuTeksInfo.tema}</p>
+            <p><strong>Unit:</strong> {bukuTeksInfo.unit}</p>
+            <p><strong>Muka Surat:</strong> {bukuTeksInfo.mukaSurat}</p>
+            {bukuTeksInfo.aktiviti && (
+              <p><strong>Aktiviti:</strong> {bukuTeksInfo.aktiviti.join(', ')}</p>
+            )}
+          </div>
+        )}
+
+        <button type="submit" disabled={loading}>
+          {loading ? '🔄 Menghasilkan RPH...' : '🚀 Generate RPH'}
+        </button>
+      </form>
+
+      {/* ✅ DISPLAY RPH RESULT */}
+      {rphResult && (
+        <div className="rph-result">
+          <h3>📄 RPH Dihasilkan</h3>
+          <div className="rph-content">
+            <pre>{rphResult.rph}</pre>
+          </div>
+          
+          {/* Display buku teks info dari backend */}
+          {rphResult.bukuTeksInfo && (
+            <div className="buku-teks-result">
+              <h4>📖 Rujukan Buku Teks Digunakan:</h4>
+              <p><strong>Tema:</strong> {rphResult.bukuTeksInfo.tema}</p>
+              <p><strong>Unit:</strong> {rphResult.bukuTeksInfo.unit}</p>
+              <p><strong>Muka Surat:</strong> {rphResult.bukuTeksInfo.mukaSurat}</p>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
