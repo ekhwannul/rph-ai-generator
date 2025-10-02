@@ -1,0 +1,12 @@
+# backend/render.yaml
+
+services:
+  - type: web
+    name: rph-ai-backend
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production

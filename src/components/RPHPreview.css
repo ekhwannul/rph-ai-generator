@@ -1,0 +1,207 @@
+/* RPHPreview.css - BARU LENGKAP */
+
+.rph-preview {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  margin-top: 2rem;
+  border: 2px solid #E9D5FF;
+}
+
+.rph-preview h2 {
+  color: #7C3AED;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+}
+
+.preview-section {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px dashed #E9D5FF;
+}
+
+.preview-section h3 {
+  color: #6D28D9;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  background: #F3E8FF;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+/* Maklumat Asas */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.info-grid div {
+  background: #F8FAFC;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border-left: 4px solid #8B5CF6;
+}
+
+.info-grid strong {
+  color: #7C3AED;
+}
+
+/* Maklumat RPT */
+.rpt-info div {
+  background: #F0FDF9;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  border-left: 4px solid #10B981;
+}
+
+/* Langkah Pengajaran - STRUCTURE BARU */
+.teaching-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.step-category {
+  background: #F8FAFC;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border-left: 6px solid #8B5CF6;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.step-category h4 {
+  color: #6D28D9;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.2rem;
+  background: #EDE9FE;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  margin: -0.5rem -1rem 1rem -1rem;
+}
+
+.step-item {
+  background: white;
+  padding: 1.25rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid #F1F5F9;
+}
+
+.step-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px dotted #E9D5FF;
+}
+
+.step-number {
+  font-weight: bold;
+  color: #7C3AED;
+  font-size: 1.1rem;
+  background: #F3E8FF;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+}
+
+.step-time {
+  background: #DBEAFE;
+  color: #1E40AF;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.step-item p {
+  margin: 0.5rem 0;
+  line-height: 1.5;
+}
+
+.step-item strong {
+  color: #475569;
+}
+
+.step-notes {
+  background: #F0FDF4;
+  border-left: 4px solid #10B981;
+  padding: 0.75rem;
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  color: #065F46;
+  border-radius: 0 8px 8px 0;
+}
+
+/* Butang Export & Print */
+.preview-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 2px dashed #E9D5FF;
+}
+
+.export-btn, .print-btn {
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.export-btn {
+  background: linear-gradient(135deg, #7C3AED, #6D28D9);
+  color: white;
+}
+
+.export-btn:hover {
+  background: linear-gradient(135deg, #6D28D9, #5B21B6);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(124, 58, 237, 0.3);
+}
+
+.print-btn {
+  background: linear-gradient(135deg, #10B981, #059669);
+  color: white;
+}
+
+.print-btn:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .rph-preview {
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .preview-actions {
+    flex-direction: column;
+  }
+  
+  .step-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
