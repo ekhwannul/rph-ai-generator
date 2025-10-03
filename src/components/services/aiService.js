@@ -1,37 +1,73 @@
 // services/aiService.js
-const createRPHPrompt = (formData, bukuTeksInfo) => {
+export const generateRPHWithAI = async (formData, bukuTeksInfo) => {
+  console.log('🔄 Using SMART RPH TEMPLATE (No API needed)');
+  
   return `
-ANDA ADALAH PAKAR PENDIDIKAN BAHASA MELAYU TAHUN 3. HASILKAN RANCANGAN PENGAJARAN HARIAN (RPH) YANG SPESIFIK DAN TERPERINCI BERDASARKAN BUKU TEKS BAHASA MELAYU TAHUN 3.
+RANCANGAN PENGAJARAN HARIAN BAHASA MELAYU
 
-**MAKLUMAT ASAS RPH:**
-- Mata Pelajaran: Bahasa Melayu
-- Kelas: Tahun ${formData.kelas}
-- Tajuk: ${formData.tajuk}
-- Standard Pembelajaran: ${formData.standardPembelajaran}
-- Minggu: ${formData.minggu}
+MATA PELAJARAN: Bahasa Melayu
+KELAS: Tahun ${formData.kelas}  
+TAJUK: ${formData.tajuk}
+MINGGU: ${formData.minggu}
+STANDARD PEMBELAJARAN: ${formData.standardPembelajaran}
 
-**INTEGRASI BUKU TEKS:**
+📚 **RUJUKAN BUKU TEKS:**
 - TEMA: ${bukuTeksInfo.tema}
 - UNIT: ${bukuTeksInfo.unit}
 - MUKA SURAT: ${bukuTeksInfo.mukaSurat}
-- AKTIVITI BUKU TEKS: ${bukuTeksInfo.aktiviti.join(', ')}
 
-**ARAHAN KHUSUS:**
-1. RPH HARUS MERUJUK LANGSUNG KEPADA BUKU TEKS
-2. GUNAKAN TERMINOLOGI SPESIFIK DARI BUKU TEKS
-3. SERTAKAN MUKA SURAT SPESIFIK UNTUK SETIAP AKTIVITI
-4. INTEGRASIKAN AKTIVITI DARI BUKU TEKS KE DALAM RPH
+🎯 **OBJEKTIF PEMBELAJARAN:**
+1. Murid dapat memahami dan mengaplikasikan kemahiran bahasa berdasarkan Buku Teks muka surat ${bukuTeksInfo.mukaSurat}
+2. Murid dapat melaksanakan aktiviti pembelajaran seperti dalam unit ${bukuTeksInfo.unit}
+3. Murid dapat menghubungkaitkan pembelajaran dengan tema ${bukuTeksInfo.tema}
 
-**CONTOH FORMAT OUTPUT:**
-"Murid MEMBUKA BUKU TEKS MUKA SURAT ${bukuTeksInfo.mukaSurat} dan MELAKSANAKAN [AKTIVITI SPESIFIK] seperti yang terkandung dalam unit ${bukuTeksInfo.unit}"
+⏰ **AKTIVITI PDPC:**
 
-HASILKAN RPH LENGKAP DENGAN:
-1. Objektif Pembelajaran yang spesifik
-2. Aktiviti PDPC yang terperinci dengan rujukan muka surat
-3. Bahan Bantu Mengajar yang sesuai
-4. Penilaian Pembelajaran
-5. KBAT dan EMK
+**1. PERMULAAN (10 minit)**
+   - Murid MEMBUKA BUKU TEKS MUKA SURAT ${bukuTeksInfo.mukaSurat}
+   - Guru memperkenalkan tajuk: ${formData.tajuk}
+   - Brainstorming tentang ${bukuTeksInfo.tema}
 
-HASILKAN RPH DALAM BAHASA MALAYSIA YANG STANDARD DAN PROFESIONAL:
-`;
+**2. PERKEMBANGAN (40 minit)**
+   - AKTIVITI 1: ${bukuTeksInfo.aktiviti[0] || 'Membaca dan memahami teks'}
+     * Murid merujuk muka surat yang spesifik
+     * Perbincangan dalam kumpulan kecil
+   
+   - AKTIVITI 2: ${bukuTeksInfo.aktiviti[1] || 'Latihan praktikal'} 
+     * Aplikasi kemahiran bahasa
+     * Bimbingan guru secara individu
+   
+   - AKTIVITI 3: ${bukuTeksInfo.aktiviti[2] || 'Aktiviti kreatif'}
+     * Penghasilan kerja berkumpulan
+     * Pembentangan hasil kerja
+
+**3. PENUTUP (10 minit)**
+   - Rumusan pembelajaran tentang ${bukuTeksInfo.unit}
+   - Refleksi murid terhadap aktiviti
+   - Pra-pandangan untuk pembelajaran seterusnya
+
+📦 **BAHAN BANTU MENGAJAR:**
+- Buku Teks Bahasa Melayu Tahun 3 (Muka Surat ${bukuTeksInfo.mukaSurat})
+- Lembaran kerja berkaitan ${bukuTeksInfo.tema}
+- Bahan bantu visual (gambar, kad imbasan)
+
+📊 **PENILAIAN:**
+- Pemerhatian guru semasa aktiviti praktikal
+- Hasil kerja bertulis murid
+- Penyertaan dalam perbincangan kumpulan
+
+💡 **KBAT (Kemahiran Berfikir Aras Tinggi):**
+- Menganalisis maklumat dari buku teks
+- Menghubungkait dengan pengalaman harian
+- Mencipta idea kreatif berdasarkan tema
+
+🌟 **NILAI MURNI:**
+- Kerjasama dalam kumpulan
+- Menghargai warisan bahasa
+- Bertanggungjawab terhadap pembelajaran
+
+📝 **CATATAN GURU:**
+RPH ini dihasilkan secara automatik dengan integrasi penuh Buku Teks Bahasa Melayu Tahun 3.
+Pastikan semua aktiviti merujuk langsung kepada muka surat yang dinyatakan.
+  `;
 };
